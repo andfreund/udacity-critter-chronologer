@@ -9,4 +9,12 @@ public class EmployeeService {
     public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
+
+    public Employee save(Employee employee) {
+        return employeeRepository.save(employee);
+    }
+
+    public Employee findById(Long id) throws UserNotFoundException {
+        return employeeRepository.findById(id).orElseThrow(UserNotFoundException::new);
+    }
 }

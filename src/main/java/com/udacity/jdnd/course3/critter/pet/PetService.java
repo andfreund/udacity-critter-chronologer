@@ -29,6 +29,10 @@ public class PetService {
         return petRepository.findById(petId).orElseThrow(PetNotFoundException::new);
     }
 
+    public List<Pet> findAllById(List<Long> petIds) {
+        return petRepository.findAllById(petIds);
+    }
+
     public List<Pet> getByOwnerId(Long ownerId) {
         return petRepository.findByOwnerId(ownerId);
     }

@@ -1,8 +1,15 @@
 package com.udacity.jdnd.course3.critter.schedule;
 
+import com.udacity.jdnd.course3.critter.pet.Pet;
+import com.udacity.jdnd.course3.critter.pet.PetService;
+import com.udacity.jdnd.course3.critter.user.CustomerService;
+import com.udacity.jdnd.course3.critter.user.Employee;
+import com.udacity.jdnd.course3.critter.user.EmployeeService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Handles web requests related to Schedules.
@@ -10,15 +17,29 @@ import java.util.List;
 @RestController
 @RequestMapping("/schedule")
 public class ScheduleController {
+    private final EmployeeService employeeService;
+    private final ScheduleService scheduleService;
+    private final PetService petService;
+
+    public ScheduleController(EmployeeService employeeService, ScheduleService scheduleService, PetService petService) {
+        this.employeeService = employeeService;
+        this.scheduleService = scheduleService;
+        this.petService = petService;
+    }
 
     @PostMapping
     public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
-        throw new UnsupportedOperationException();
+        Schedule schedule = convertScheduleDTOToEntity(scheduleDTO);
+        schedule.setEmployees(employeeService.findEmployeesForService(scheduleDTO.getActivities(), scheduleDTO.getDate().getDayOfWeek()));
+        schedule.setPets(petService.findAllById(scheduleDTO.getPetIds()));
+        Schedule savedSchedule = scheduleService.save(schedule);
+        return convertScheduleEntityToDTO(savedSchedule);
     }
 
     @GetMapping
     public List<ScheduleDTO> getAllSchedules() {
-        throw new UnsupportedOperationException();
+        List<Schedule> schedules = scheduleService.findAll();
+        return schedules.stream().map(this::convertScheduleEntityToDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/pet/{petId}")
@@ -34,5 +55,19 @@ public class ScheduleController {
     @GetMapping("/customer/{customerId}")
     public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
         throw new UnsupportedOperationException();
+    }
+
+    private Schedule convertScheduleDTOToEntity(ScheduleDTO scheduleDTO) {
+        Schedule schedule = new Schedule();
+        BeanUtils.copyProperties(scheduleDTO, schedule);
+        return schedule;
+    }
+
+    private ScheduleDTO convertScheduleEntityToDTO(Schedule schedule) {
+        ScheduleDTO scheduleDTO = new ScheduleDTO();
+        BeanUtils.copyProperties(schedule, scheduleDTO);
+        scheduleDTO.setPetIds(schedule.getPets().stream().map(Pet::getId).collect(Collectors.toList()));
+        scheduleDTO.setEmployeeIds(schedule.getEmployees().stream().map(Employee::getId).collect(Collectors.toList()));
+        return scheduleDTO;
     }
 }

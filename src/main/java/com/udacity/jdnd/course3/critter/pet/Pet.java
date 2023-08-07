@@ -22,6 +22,7 @@ public class Pet {
 
     private LocalDate birthDate;
 
+    @Column(length = 1024)
     private String notes;
 
     public Long getId() {

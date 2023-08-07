@@ -1,16 +1,16 @@
 package com.udacity.jdnd.course3.critter.user;
 
 import com.udacity.jdnd.course3.critter.pet.Pet;
-import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 
 import java.util.List;
 
 @Entity
-public class Customer extends Person {
+public class Customer extends User {
     private String phoneNumber;
 
+    @Column(length = 1024)
     private String notes;
 
     @OneToMany(mappedBy = "owner")

@@ -5,7 +5,7 @@ import java.time.DayOfWeek;
 import java.util.Set;
 
 @Entity
-public class Employee extends Person {
+public class Employee extends User {
     @ElementCollection
     private Set<EmployeeSkill> skills;
 

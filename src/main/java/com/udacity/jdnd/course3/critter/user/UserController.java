@@ -1,6 +1,7 @@
 package com.udacity.jdnd.course3.critter.user;
 
 import com.fasterxml.jackson.databind.util.BeanUtil;
+import com.udacity.jdnd.course3.critter.pet.Pet;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,6 +77,7 @@ public class UserController {
     private CustomerDTO convertCustomerEntityToDTO(Customer customer) {
         CustomerDTO dto = new CustomerDTO();
         BeanUtils.copyProperties(customer, dto);
+        dto.setPetIds(customer.getPets().stream().map(Pet::getId).collect(Collectors.toList()));
         return dto;
     }
 

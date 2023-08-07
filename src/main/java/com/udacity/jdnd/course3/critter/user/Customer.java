@@ -4,6 +4,7 @@ import com.udacity.jdnd.course3.critter.pet.Pet;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,7 +15,7 @@ public class Customer extends User {
     private String notes;
 
     @OneToMany(mappedBy = "owner")
-    private List<Pet> pets;
+    private List<Pet> pets = new ArrayList<>();
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -38,5 +39,13 @@ public class Customer extends User {
 
     public void setPets(List<Pet> pets) {
         this.pets = pets;
+    }
+
+    public void addPet(Pet pet) {
+        pets.add(pet);
+    }
+
+    public void removePet(Pet pet) {
+        pets.remove(pet);
     }
 }

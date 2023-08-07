@@ -6,7 +6,7 @@ import java.util.List;
 
 @Service
 public class CustomerService {
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
     public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
@@ -18,5 +18,13 @@ public class CustomerService {
 
     public List<Customer> findAll() {
         return customerRepository.findAll();
+    }
+
+    public Customer findById(Long ownerId) {
+        return customerRepository.findById(ownerId).orElseThrow(UserNotFoundException::new);
+    }
+
+    public Customer getReferenceById(Long ownerId) {
+        return customerRepository.getOne(ownerId);
     }
 }

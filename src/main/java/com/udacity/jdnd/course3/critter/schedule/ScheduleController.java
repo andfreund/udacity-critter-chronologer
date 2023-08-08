@@ -2,7 +2,6 @@ package com.udacity.jdnd.course3.critter.schedule;
 
 import com.udacity.jdnd.course3.critter.pet.Pet;
 import com.udacity.jdnd.course3.critter.pet.PetService;
-import com.udacity.jdnd.course3.critter.user.CustomerService;
 import com.udacity.jdnd.course3.critter.user.Employee;
 import com.udacity.jdnd.course3.critter.user.EmployeeService;
 import org.springframework.beans.BeanUtils;
@@ -30,8 +29,7 @@ public class ScheduleController {
     @PostMapping
     public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
         Schedule schedule = convertScheduleDTOToEntity(scheduleDTO);
-        schedule.setEmployees(employeeService.findEmployeesForService(scheduleDTO.getActivities(), scheduleDTO.getDate().getDayOfWeek()));
-        // TODO what if no employee as found?
+        schedule.setEmployees(employeeService.findAllByIds(scheduleDTO.getEmployeeIds()));
         schedule.setPets(petService.findAllById(scheduleDTO.getPetIds()));
         Schedule savedSchedule = scheduleService.save(schedule);
         return convertScheduleEntityToDTO(savedSchedule);
@@ -45,7 +43,8 @@ public class ScheduleController {
 
     @GetMapping("/pet/{petId}")
     public List<ScheduleDTO> getScheduleForPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
+        List<Schedule> schedules = scheduleService.findByPetId(petId);
+        return schedules.stream().map(this::convertScheduleEntityToDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/employee/{employeeId}")
@@ -56,7 +55,8 @@ public class ScheduleController {
 
     @GetMapping("/customer/{customerId}")
     public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
-        throw new UnsupportedOperationException();
+        List<Schedule> schedules = scheduleService.findByCustomerId(customerId);
+        return schedules.stream().map(this::convertScheduleEntityToDTO).collect(Collectors.toList());
     }
 
     private Schedule convertScheduleDTOToEntity(ScheduleDTO scheduleDTO) {

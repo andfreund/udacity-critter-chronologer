@@ -6,7 +6,6 @@ import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,10 +20,10 @@ public class Schedule {
     private Set<EmployeeSkill> activities;
 
     @ManyToMany
-    private List<Employee> employees;
+    private Set<Employee> employees;
 
     @ManyToMany
-    private List<Pet> pets;
+    private Set<Pet> pets;
 
     public Long getId() {
         return id;
@@ -50,19 +49,19 @@ public class Schedule {
         this.activities = activities;
     }
 
-    public List<Employee> getEmployees() {
+    public Set<Employee> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(List<Employee> employees) {
+    public void setEmployees(Set<Employee> employees) {
         this.employees = employees;
     }
 
-    public List<Pet> getPets() {
+    public Set<Pet> getPets() {
         return pets;
     }
 
-    public void setPets(List<Pet> pets) {
+    public void setPets(Set<Pet> pets) {
         this.pets = pets;
     }
 }

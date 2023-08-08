@@ -6,7 +6,7 @@ import java.util.List;
 
 @Service
 public class ScheduleService {
-    private ScheduleRepository scheduleRepository;
+    private final ScheduleRepository scheduleRepository;
 
     public ScheduleService(ScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;
@@ -22,5 +22,13 @@ public class ScheduleService {
 
     public List<Schedule> findByEmployeeId(Long employeeId) {
         return scheduleRepository.findByEmployeesId(employeeId);
+    }
+
+    public List<Schedule> findByPetId(Long petId) {
+        return scheduleRepository.findByPetsId(petId);
+    }
+
+    public List<Schedule> findByCustomerId(Long customerId) {
+        return scheduleRepository.findByCustomerId(customerId);
     }
 }

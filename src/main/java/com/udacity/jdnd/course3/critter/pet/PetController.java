@@ -3,7 +3,6 @@ package com.udacity.jdnd.course3.critter.pet;
 import com.udacity.jdnd.course3.critter.user.Customer;
 import com.udacity.jdnd.course3.critter.user.CustomerService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,7 +39,7 @@ public class PetController {
 
     @GetMapping
     public List<PetDTO> getPets(){
-        throw new UnsupportedOperationException();
+        return petService.findAll().stream().map(this::convertPetEntityToDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/owner/{ownerId}")

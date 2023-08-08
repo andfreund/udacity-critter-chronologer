@@ -30,7 +30,7 @@ import java.util.stream.IntStream;
  *
  * These tests should all pass once the project is complete.
  */
-//@Transactional
+@Transactional
 @SpringBootTest(classes = CritterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("fixedport")
 public class CritterFunctionalTest {
@@ -101,6 +101,26 @@ public class CritterFunctionalTest {
         PetDTO newPet2 = petController.savePet(petDTO);
 
         List<PetDTO> pets = petController.getPetsByOwner(newCustomer.getId());
+        Assertions.assertEquals(pets.size(), 2);
+        Assertions.assertEquals(pets.get(0).getOwnerId(), newCustomer.getId());
+        Assertions.assertEquals(pets.get(0).getId(), newPet.getId());
+        Assertions.assertEquals(pets.get(1).getOwnerId(), newCustomer.getId());
+        Assertions.assertEquals(pets.get(1).getId(), newPet2.getId());
+    }
+
+    @Test
+    public void testFindAllPets() {
+        CustomerDTO customerDTO = createCustomerDTO();
+        CustomerDTO newCustomer = userController.saveCustomer(customerDTO);
+
+        PetDTO petDTO = createPetDTO();
+        petDTO.setOwnerId(newCustomer.getId());
+        PetDTO newPet = petController.savePet(petDTO);
+        petDTO.setType(PetType.DOG);
+        petDTO.setName("DogName");
+        PetDTO newPet2 = petController.savePet(petDTO);
+
+        List<PetDTO> pets = petController.getPets();
         Assertions.assertEquals(pets.size(), 2);
         Assertions.assertEquals(pets.get(0).getOwnerId(), newCustomer.getId());
         Assertions.assertEquals(pets.get(0).getId(), newPet.getId());

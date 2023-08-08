@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,8 +26,12 @@ public class EmployeeService {
     }
 
     @Transactional
-    public List<Employee> findEmployeesForService(Set<EmployeeSkill> skills, DayOfWeek day) {
-        List<Employee> availableEmployees = employeeRepository.findByDaysAvailable(day);
-        return availableEmployees.stream().filter(e -> e.getSkills().containsAll(skills)).collect(Collectors.toList());
+    public Set<Employee> findEmployeesForService(Set<EmployeeSkill> skills, DayOfWeek day) {
+        Set<Employee> availableEmployees = employeeRepository.findByDaysAvailable(day);
+        return availableEmployees.stream().filter(e -> e.getSkills().containsAll(skills)).collect(Collectors.toSet());
+    }
+
+    public Set<Employee> findAllByIds(List<Long> employeeIds) {
+        return new HashSet<>(employeeRepository.findAllById(employeeIds));
     }
 }

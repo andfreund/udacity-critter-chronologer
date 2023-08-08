@@ -1,6 +1,7 @@
 package com.udacity.jdnd.course3.critter.user;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.util.List;
@@ -23,6 +24,7 @@ public class EmployeeService {
         return employeeRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
+    @Transactional
     public List<Employee> findEmployeesForService(Set<EmployeeSkill> skills, DayOfWeek day) {
         List<Employee> availableEmployees = employeeRepository.findByDaysAvailable(day);
         return availableEmployees.stream().filter(e -> e.getSkills().containsAll(skills)).collect(Collectors.toList());

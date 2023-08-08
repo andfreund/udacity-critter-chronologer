@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.pet;
 import com.udacity.jdnd.course3.critter.user.Customer;
 import com.udacity.jdnd.course3.critter.user.CustomerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class PetService {
         this.customerRepository = customerRepository;
     }
 
+    @Transactional
     public Pet save(Pet pet) {
         Pet returnedPet = petRepository.save(pet);
         Customer customer = returnedPet.getOwner();

@@ -31,6 +31,7 @@ public class ScheduleController {
     public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
         Schedule schedule = convertScheduleDTOToEntity(scheduleDTO);
         schedule.setEmployees(employeeService.findEmployeesForService(scheduleDTO.getActivities(), scheduleDTO.getDate().getDayOfWeek()));
+        // TODO what if no employee as found?
         schedule.setPets(petService.findAllById(scheduleDTO.getPetIds()));
         Schedule savedSchedule = scheduleService.save(schedule);
         return convertScheduleEntityToDTO(savedSchedule);
@@ -49,7 +50,8 @@ public class ScheduleController {
 
     @GetMapping("/employee/{employeeId}")
     public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+        List<Schedule> schedules = scheduleService.findByEmployeeId(employeeId);
+        return schedules.stream().map(this::convertScheduleEntityToDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/customer/{customerId}")

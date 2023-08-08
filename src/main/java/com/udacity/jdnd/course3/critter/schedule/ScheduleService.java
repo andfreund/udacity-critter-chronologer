@@ -19,4 +19,8 @@ public class ScheduleService {
     public List<Schedule> findAll() {
         return scheduleRepository.findAll();
     }
+
+    public List<Schedule> findByEmployeeId(Long employeeId) {
+        return scheduleRepository.findByEmployeesId(employeeId);
+    }
 }

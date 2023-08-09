@@ -7,6 +7,7 @@ import com.udacity.jdnd.course3.critter.user.EmployeeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,8 +30,8 @@ public class ScheduleController {
     @PostMapping
     public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
         Schedule schedule = convertScheduleDTOToEntity(scheduleDTO);
-        schedule.setEmployees(employeeService.findAllByIds(scheduleDTO.getEmployeeIds()));
-        schedule.setPets(petService.findAllById(scheduleDTO.getPetIds()));
+        schedule.setEmployees(new HashSet<>(employeeService.findAllByIds(scheduleDTO.getEmployeeIds())));
+        schedule.setPets(new HashSet<>(petService.findAllById(scheduleDTO.getPetIds())));
         Schedule savedSchedule = scheduleService.save(schedule);
         return convertScheduleEntityToDTO(savedSchedule);
     }

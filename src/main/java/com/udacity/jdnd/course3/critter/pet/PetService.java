@@ -5,7 +5,8 @@ import com.udacity.jdnd.course3.critter.user.CustomerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 
 @Service
 public class PetService {
@@ -23,7 +24,6 @@ public class PetService {
         Customer customer = returnedPet.getOwner();
         customer.addPet(returnedPet);
         customerRepository.save(customer);
-
         return returnedPet;
     }
 
@@ -31,8 +31,8 @@ public class PetService {
         return petRepository.findById(petId).orElseThrow(PetNotFoundException::new);
     }
 
-    public Set<Pet> findAllById(List<Long> petIds) {
-        return new HashSet<>(petRepository.findAllById(new ArrayList<>(petIds)));
+    public List<Pet> findAllById(List<Long> petIds) {
+        return petRepository.findAllById(new ArrayList<>(petIds));
     }
 
     public List<Pet> getByOwnerId(Long ownerId) {

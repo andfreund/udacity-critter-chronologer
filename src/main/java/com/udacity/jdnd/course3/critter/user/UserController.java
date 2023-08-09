@@ -1,6 +1,5 @@
 package com.udacity.jdnd.course3.critter.user;
 
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.udacity.jdnd.course3.critter.pet.Pet;
 import com.udacity.jdnd.course3.critter.pet.PetService;
 import org.springframework.beans.BeanUtils;
@@ -63,16 +62,17 @@ public class UserController {
     }
 
     @PutMapping("/employee/{employeeId}")
-    public void setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
+    public EmployeeDTO setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
         Employee employee = employeeService.findById(employeeId);
         employee.setDaysAvailable(daysAvailable);
         employeeService.save(employee);
+        return convertEmployeeEntityToDTO(employee);
     }
 
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
         DayOfWeek requestedDay = employeeDTO.getDate().getDayOfWeek();
-        Set<Employee> employees = employeeService.findEmployeesForService(employeeDTO.getSkills(), requestedDay);
+        List<Employee> employees = employeeService.findEmployeesForService(employeeDTO.getSkills(), requestedDay);
         return employees.stream().map(this::convertEmployeeEntityToDTO).collect(Collectors.toList());
     }
 
